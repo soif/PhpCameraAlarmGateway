@@ -46,9 +46,15 @@ In the Device Setting (access via CMS, or via InternetExporer):
 - view Logfile: `tail -f /var/log/pcag.php.log`
 
 
+## Known bugs
+ While the daemon is working as expected to serve client requests as a multi threaded server, the parent/child mechanism is launched twice (PEAR system_daemon + php-multithreaded-socket-server), which obvioulsy is NOT clean and safe.
+
+** Anyone mastering the *PCNTL* Php Extension is *ABSOLUTELY WELCOME* to submit a Pull Request to fix this.**
+
+
 ## License
 
-This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+This program is free software. You can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
