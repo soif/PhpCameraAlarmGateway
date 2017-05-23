@@ -120,7 +120,7 @@ class PhpCameraAlarmProcess {
 		}
 		else{
 			$action='on+';
-			isset($p['dur']) and $dur=$p['dur'] or $dur=3;
+			isset($p['dur']) and $dur=$p['dur'] or $dur=5;
 			$action .=$dur;
 		}
 		// set others params defaults
