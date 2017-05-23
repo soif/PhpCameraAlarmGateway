@@ -183,12 +183,14 @@ class PhpCameraAlarmGateway {
 		return  $serv_ip;
 	}
 
+
 	// ###################################################################################
-	// ###################################################################################
+	// ### STATIC ########################################################################
 	// ###################################################################################
 
 	// -----------------------------------------------------------------------------------
 	static function OnConnect($client){
+
 		// take care of parent/child --------
 		$pid = pcntl_fork();
 		if ($pid == -1) {
@@ -227,19 +229,18 @@ class PhpCameraAlarmGateway {
 			else {
 				//handle message
 				System_Daemon::debug( "# [$client_ip] (PID=$pid) Received => " . trim($read) );
-				self::processAlarmMsg($client_ip, $read);
+				self::processMessage($client_ip, $read);
 				//break;	//needed?
 			}
 		}
 		$client->close();
 		System_Daemon::debug( "# [$client_ip] (PID=$pid) Disconnected" );
 		exit(0);
-
 	}
 
 
 	// -----------------------------------------------------------------------------------
-	static function processAlarmMsg($client_ip,$msg){
+	static function processMessage($client_ip, $msg){
 		if($type=self::$cfg['cameras'][$client_ip]['type']){
 			System_Daemon::info( "# [$client_ip] parsing '$type' message ...");
 			require_once(dirname(__FILE__)."/process_{$type}.php");
@@ -251,9 +252,6 @@ class PhpCameraAlarmGateway {
 			System_Daemon::debug( "# [$client_ip] Not processed ! ");
 		}
 	}
-
-
-
 
 }
 ?>
