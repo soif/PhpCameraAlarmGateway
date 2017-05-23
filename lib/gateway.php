@@ -110,7 +110,7 @@ class PhpCameraAlarmGateway {
 			'appDir' 				=> dirname(dirname(__FILE__)),
 			'appDescription'		=> 'IP Camera Alarms Server',
 			'authorName'			=> 'Francois Dechery',
-//			'authorEmail'			=> 'something@gmail.com',
+			'authorEmail'			=> 'something@gmail.com',
 			'sysMaxExecutionTime' 	=> '0',
 			'sysMaxInputTime' 		=> '0',
 			'sysMemoryLimit' 		=> '128M',
@@ -123,8 +123,18 @@ class PhpCameraAlarmGateway {
 		);
 		System_Daemon::setOptions($options);
 
+		// write-initd argment ------------------------------------------------
+		if ($this->runmode['write-initd']) {
+			if (($initd_location = System_Daemon::writeAutoRun()) === false) {
+				System_Daemon::info("# Unable to write  init.d script");
+			} 
+			else {
+				System_Daemon::info("# sucessfully written startup script! ;-)");
+			}
+			exit;
+		}
 
-		/* This program can also be run in  the forground with runmode --no-daemon */
+		// This program can also be run in  the forground with runmode --no-daemon .... are we sure ??????
 		if ($this->runmode['no-daemon']) {
 			System_Daemon::notice("-----------------------------------------");
 			System_Daemon::warning("# Starting {$this->bin_name} in TEST mode");
@@ -136,22 +146,9 @@ class PhpCameraAlarmGateway {
 			System_Daemon::info("# Starting {$this->bin_name} as daemon");
 		}
 
-		System_Daemon::info("# {$this->bin_name} is listening on {$this->server_ip}:{$this->server_port}");
 
 
-		/* With the runmode --write-initd,  this program can automatically write a system startup file called:  'init.d' 
-		This will make sure your daemon  will be started on reboot */
-
-		if ($this->runmode['write-initd']) {
-			if (($initd_location = System_Daemon::writeAutoRun()) === false) {
-				System_Daemon::err('# Unable to write  init.d script');
-			} 
-			else {
-				System_Daemon::notice('# sucessfully written startup script: ' . $initd_location);
-			}
-		}
-
-		// Start SERVER ++++++++++++++++++++++++++++++++++++++++
+		// SERVER #############################################################################################
 		//$is_daemon 			= System_Daemon::isInBackground();
 
 		// check required PHP extensions
@@ -163,6 +160,10 @@ class PhpCameraAlarmGateway {
 			System_Daemon::err('# missing PCNTL extension (http://www.php.net/manual/en/pcntl.installation.php)');
 			exit(-1);
 		}
+
+		// daemon is listening 
+		System_Daemon::info("# {$this->bin_name} is listening on {$this->server_ip}:{$this->server_port}");
+
 
 		// ---------------------------------------------------------------------------------------
 		$server = new \Sock\SocketServer($this->server_port,$this->server_ip);
