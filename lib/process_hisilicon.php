@@ -25,13 +25,14 @@ require_once(dirname(__FILE__).'/process.php');
 class PhpCameraAlarmProcess_hisilicon extends PhpCameraAlarmProcess {
 
 	public function process($ip, $msg){
+
 		//decode message
 		$msg=trim($msg);
 		$msg=preg_replace('#^[^{]+#','',$msg);
 		//System_Daemon::debug( "[$ip] process : Cleaned Message=$msg");
 		$arr=json_decode($msg,true);
 
-		// triggers
+		// triggers defaults
 		$p=$this->cfg['cameras'][$ip];
 		isset($p['event'])	and $trig_event		=$p['event']	or $trig_event	='MotionDetect';
 		isset($p['status'])	and $trig_status	=$p['status']	or $trig_status	='Start';
