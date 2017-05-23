@@ -1,0 +1,10 @@
+
+# Mac hidden files ####
+.AppleDouble
+:2e*
+/Icon*
+.#*
+.afpDeleted*
+
+##############################
+/config.php
