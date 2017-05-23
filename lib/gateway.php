@@ -38,7 +38,7 @@ class PhpCameraAlarmGateway {
 	var $runmode_help	=array(
 			'no-daemon' 	=> "Don't run as Daemon",
 			'help' 			=> "Shows this help",
-			'write-initd' 	=> 'Build the /etc/init.d script. (then do u"pdate-rc.d {$this->bin_name} defaults")'
+			'write-initd' 	=> 'Build the /etc/init.d script. (then do "update-rc.d {$this->bin_name} defaults")'
 	);
 
 	// -----------------------------------------------------------------------------------
@@ -97,7 +97,7 @@ class PhpCameraAlarmGateway {
 			echo 'Usage: '.$argv[0].' [runmode]' . "\n";
 			echo 'Available runmodes:' . "\n";
 			foreach ($this->runmode as $runmod=>$val) {
-				echo " --$runmod	: {$this->runmode_help[$runmod]}\n";
+				echo str_pad(" --$runmod",15) .": {$this->runmode_help[$runmod]}\n";
 			}
 			die();
 		}
@@ -108,12 +108,12 @@ class PhpCameraAlarmGateway {
 		$options = array(
 			'appName' 				=> $this->bin_name,
 			'appDir' 				=> dirname(dirname(__FILE__)),
-			'appDescription'		=> 'Listen to HiSilicon IP camera  Alarms Event',
+			'appDescription'		=> 'IP Camera Alarms Server',
 			'authorName'			=> 'Francois Dechery',
-			'authorEmail'			=> 'something@gmail.com',
+//			'authorEmail'			=> 'something@gmail.com',
 			'sysMaxExecutionTime' 	=> '0',
 			'sysMaxInputTime' 		=> '0',
-			'sysMemoryLimit' 		=> '64M',
+			'sysMemoryLimit' 		=> '128M',
 			//'usePEARLogInstance'	=> true,
 			'useCustomLogHandler'	=> false,
 			'logPhpErrors'			=> $this->log_php,
@@ -126,6 +126,7 @@ class PhpCameraAlarmGateway {
 
 		/* This program can also be run in  the forground with runmode --no-daemon */
 		if ($this->runmode['no-daemon']) {
+			System_Daemon::notice("-----------------------------------------");
 			System_Daemon::warning("# Starting {$this->bin_name} in TEST mode");
 		}
 		else{
@@ -134,6 +135,7 @@ class PhpCameraAlarmGateway {
 			System_Daemon::notice("-----------------------------------------");
 			System_Daemon::info("# Starting {$this->bin_name} as daemon");
 		}
+
 		System_Daemon::info("# {$this->bin_name} is listening on {$this->server_ip}:{$this->server_port}");
 
 
