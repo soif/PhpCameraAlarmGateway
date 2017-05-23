@@ -1,4 +1,4 @@
-# Php Camera Alarm Gateway (WORK IN PROGRESS)
+    # Php Camera Alarm Gateway (WORK IN PROGRESS)
 Server Daemon to listen to IP Camera Alarm messages, decode it and send triggers to ZoneMinder, Domoticz, Custom URLs....
 
 This allows to offload the motion detection work to each camera
@@ -15,7 +15,7 @@ This allows to offload the motion detection work to each camera
 - Run as multi threaded unix daemon
 
 ## Installation
-#### PEAR modules needed
+#### 1) PEAR modules needed
 Under Debian, install by:
 ```
 apt-get install php-pear
@@ -23,10 +23,10 @@ pear install System_Daemon
 pear install Log
 ```
 
-#### Set Configuration
+#### 2) Set Configuration
 Copy *config.default.php* to *config.php*, and set your configuration
 
-#### Setting in each Hivision IP Cameras
+#### 3) Setting in each Hivision IP Cameras
 In the Device Setting (access via CMS, or via InternetExporer):
 - **Alarm** page / Video Motion :
     - set sensivity to 'Highest' (or lower)
@@ -40,7 +40,7 @@ In the Device Setting (access via CMS, or via InternetExporer):
     - Server Address (the IP/hostname where PCAG is installed)
     - Port (same as set in PCAG config, ie 15000)
 
-#### Daemon & Log file
+#### 4) Daemon & Log file
 - Launch Daemon :`./pcag.php`
 - Kill Daemon : `killall -9 pcag.php`
 - view Logfile: `tail -f /var/log/pcag.php.log`
