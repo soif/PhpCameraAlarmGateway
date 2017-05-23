@@ -1,34 +1,49 @@
-# MySensors Christmas Tree
+# Php Camera Alarm Gateway (WORK IN PROGRESS)
+Server Daemon to listen to IP Camera Alarm messages, decode it and send triggers to ZoneMinder, Domoticz, Custom URLs....
 
-This Arduino Nano based project is a [MySensors](https://www.mysensors.org/)  node which controls a (5V) led strip, aka NeoPixels (based on WS2811 chips or similars) as well as one SSR (aka Solid State Relay) output. Both output can be set OFF, ON, and  Animation mode.
-Animation mode chains various sequences for the Led Strip output, and some blink patterns for the SSR output.
+This allows to offload the motion detection work to each camera
 
 
 ## Features
 
-- Supports 3 modes for each output (NeoPixels or SSR) : Off,On, Animation
-- Toggles between modes by pressing a dedicated hardware push button, or via Mysensors radio messages
-- Feedbacks the current output mode using a led
-- In On mode (for NeoPixels), controls leds colors, via Mysensor RVB radio messages
-- In Animation mode , controls animation speed using a potentiometer or via Mysensors radio messages
+- Parse Hivision based (chinese cheap camera) IP Camera messages
+- Can trigger :
+    - ZoneMinder API
+    - ZoneMinder Triggers
+    - Domoticz Switches
+    - Custom URL
+- Run as multi threaded unix daemon
 
+## Installation
+#### PEAR modules needed
+Under Debian, install by:
+```
+apt-get install php-pear
+pear install System_Daemon
+pear install Log
+```
 
-## User Guide
+#### Set Configuration
+Copy *config.default.php* to *config.php*, and set your configuration
 
- - Each (short) click on a button switch between the 3 modes : OFF, ON, Animation
- - In animation mode, turning the potentiometer WHILE keeping the button held, changes its animation speed
+#### Setting in each Hivision IP Cameras
+In the Device Setting (access via CMS, or via InternetExporer):
+- **Alarm** page / Video Motion :
+    - set sensivity to 'Highest' (or lower)
+    - set the region
+    - Check "Enable"
+    - Check "Alarm Output"
+    - You may Check "Write Log" to verify that event are set as you wish
+- **System** page / NetServices / AlarmServer :
+    - Check "Enable"
+    - Check "Alarm Report"
+    - Server Address (the IP/hostname where PCAG is installed)
+    - Port (same as set in PCAG config, ie 15000)
 
-
-## Schematic
-![schematic](images/schematic.png)
-
-
-## Wiring
-![wiring](images/wiring.png)
-
-## Images
-![Box](images/img_box.jpg)
-![OpenBox](images/img_open.jpg)
+#### Daemon & Log file
+- Launch Daemon :`./pcag.php`
+- Kill Daemon : `killall -9 pcag.php`
+- view Logfile: `tail -f /var/log/pcag.php.log`
 
 
 ## License
