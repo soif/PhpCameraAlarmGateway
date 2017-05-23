@@ -24,7 +24,7 @@ require_once(dirname(__FILE__).'/process.php');
 
 class PhpCameraAlarmProcess_hisilicon extends PhpCameraAlarmProcess {
 
-	function process($ip, $msg){
+	public function process($ip, $msg){
 		//decode message
 		$msg=trim($msg);
 		$msg=preg_replace('#^[^{]+#','',$msg);

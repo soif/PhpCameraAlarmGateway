@@ -23,11 +23,26 @@
 class PhpCameraAlarmProcess {
 	var $cfg;
 
+
 	// -----------------------------------------------------------------------------------
 	public function __construct($cfg){
 		$this->cfg=$cfg;
 	}
-	
+
+
+	// -----------------------------------------------------------------------------------
+	// PARSE INCOMING MESSAGE
+	// (extend for each type)
+	public function process($client_ip, $message_received){
+		if(true){
+			$this->performActions($client_ip);			
+		}
+		else{
+			System_Daemon::debug( "# [$client_ip] Process canceled : Invalid/unsupported message!");						
+		}
+		
+	}
+
 
 	// -----------------------------------------------------------------------------------
 	protected function performActions($ip){
@@ -61,6 +76,7 @@ class PhpCameraAlarmProcess {
 			System_Daemon::warning( "# [$ip] NO action to process$log");
 		}
 	}
+
 
 	// -----------------------------------------------------------------------------------
 	private function callUrl($url,$timeout=1){
@@ -130,14 +146,9 @@ class PhpCameraAlarmProcess {
 		isset($p['show'])	and $show	=$p['show']		or $show	='';	//max 32
 
 		$message="$id|$action|$score|$cause|$text|$show\n";
-		/*
-		$sock = socket_create(AF_INET, SOCK_RAW, SOL_TCP);
-		$msg = "Ping !";
-		$len = strlen($msg);
-		socket_sendto($sock, $msg, $len, 0, '127.0.0.1', 1223);
-		socket_close($sock);
-		*/
+
 		$host=parse_url($this->cfg['urls']['zoneminder'], PHP_URL_HOST);
+
 		$fp = fsockopen($host, 6802, $errno, $errstr, 3);
 		if (!$fp) {
 			System_Daemon::err( "# ERR! socket failed : ($errno) $errstr");
@@ -157,8 +168,6 @@ class PhpCameraAlarmProcess {
 		$url=$this->cfg['urls']['domoticz']."/json.htm?type=command&param=switchlight&idx={$p['id']}&switchcmd=On";
 		return $this->callUrl($url,2);
 	}
-
-
 
 }
 ?>
