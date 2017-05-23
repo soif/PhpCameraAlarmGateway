@@ -49,7 +49,7 @@ In the Device Setting (access via CMS, or via InternetExporer):
 ## Known bugs
  While the daemon is working as expected to serve client requests as a multi threaded server, the parent/child mechanism is launched twice (PEAR system_daemon + php-multithreaded-socket-server), which obvioulsy is NOT clean and safe.
 
-** Anyone mastering the *PCNTL* Php Extension is *ABSOLUTELY WELCOME* to submit a Pull Request to fix this.**
+**Anyone mastering the *PCNTL* Php Extension is *ABSOLUTELY WELCOME* to submit a Pull Request to fix this.**
 
 
 ## License
