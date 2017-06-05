@@ -265,6 +265,10 @@ class PhpCameraAlarmGateway {
 
 	// -----------------------------------------------------------------------------------
 	static function processMessage($client_ip, $msg){
+		if(!isset(self::$cfg['cameras'][$client_ip])){
+			System_Daemon::debug( "# [$client_ip] Unknown IP address ! ");
+			return false;
+		}
 		if($type=self::$cfg['cameras'][$client_ip]['type']){
 			System_Daemon::info( "# [$client_ip] parsing '$type' message ...");
 			require_once(dirname(__FILE__)."/process_{$type}.php");
