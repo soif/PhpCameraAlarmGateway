@@ -135,15 +135,18 @@ class PhpCameraAlarmGateway {
 		}
 
 		// This program can also be run in  the forground with runmode --no-daemon .... are we sure ??????
+
 		if ($this->runmode['no-daemon']) {
+			$pid=getmypid();
 			System_Daemon::notice("-----------------------------------------");
-			System_Daemon::warning("# Starting {$this->bin_name} in TEST mode");
+			System_Daemon::warning("# Starting {$this->bin_name} in TEST mode, with PID: $pid");
 		}
 		else{
 			set_time_limit (0);
 			System_Daemon::start();
+			$pid=getmypid();
 			System_Daemon::notice("-----------------------------------------");
-			System_Daemon::info("# Starting {$this->bin_name} as daemon");
+			System_Daemon::info("# Starting {$this->bin_name} as daemon, with PID: $pid");
 		}
 
 
@@ -166,6 +169,21 @@ class PhpCameraAlarmGateway {
 
 
 		// ---------------------------------------------------------------------------------------
+/*
+		$sock = socket_create(AF_INET, SOCK_STREAM, 0); // 0 for  SQL_TCP
+		socket_bind($sock, $this->server_ip, $this->server_port) or die('Could not bind to address');  //0 for localhost
+		socket_listen($sock);
+		$is_ok=true;
+		while (!System_Daemon::isDying() && $is_ok) {
+			$client	= socket_accept($sock);
+			$input	= socket_read($client, 1024000);
+			$msg	=trim($input);
+			socket_write($client, $response);
+			socket_close($client);
+		}
+		socket_close($sock);
+*/
+
 		$server = new \Sock\SocketServer($this->server_port,$this->server_ip);
 		$server->showLog(false);
 		$server->init();		
@@ -173,7 +191,7 @@ class PhpCameraAlarmGateway {
 		$server->listen();
 
 		System_Daemon::stop();
-	}	
+	}
 
 
 	// -----------------------------------------------------------------------------------
@@ -193,8 +211,10 @@ class PhpCameraAlarmGateway {
 
 	// -----------------------------------------------------------------------------------
 	static function OnConnect($client){
-
+		$pid=getmypid();
+		
 		// take care of parent/child --------
+/*
 		$pid = pcntl_fork();
 		if ($pid == -1) {
 			System_Daemon::warning( "# Could not fork");
@@ -205,7 +225,7 @@ class PhpCameraAlarmGateway {
 		else {
 			return;// new child handles next connection
 		}	
-
+*/
 		// process TCP client
 		$read = '';
 		$client_ip		=$client->getPeerAddress();
@@ -217,7 +237,8 @@ class PhpCameraAlarmGateway {
 
 			if( $read != '' ) {
 				//reply to client
-				$client->send( '[' . date( DATE_RFC822 ) . '] ' . $read  );
+				//$client->send( '[' . date( DATE_RFC822 ) . '] ' . $read  );
+				$client->send( '[' . date( DATE_RFC822 ) . "] OK!\n" );
 			}
 			else {
 				break;
@@ -238,7 +259,7 @@ class PhpCameraAlarmGateway {
 		}
 		$client->close();
 		System_Daemon::debug( "# [$client_ip] (PID=$pid) Disconnected" );
-		exit(0);
+		//exit(0);
 	}
 
 
