@@ -1,7 +1,7 @@
 # Php Camera Alarm Gateway
-This scripts (running as a Server Daemon) listen to IP Camera Alarm messages, decodes messages and send triggers to ZoneMinder, Domoticz, Custom URLs....
+This script (running as a Server Daemon) listen to IP Camera Alarm messages, decodes messages and send triggers to ZoneMinder, Domoticz, Custom URLs....
 
-This allows to offload the motion detection work to each camera
+This allows to offload the motion detection work to each camera.
 
 
 ## Features
