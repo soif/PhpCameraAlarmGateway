@@ -1,4 +1,4 @@
-    # Php Camera Alarm Gateway (WORK IN PROGRESS)
+# Php Camera Alarm Gateway (WORK IN PROGRESS)
 Server Daemon to listen to IP Camera Alarm messages, decode it and send triggers to ZoneMinder, Domoticz, Custom URLs....
 
 This allows to offload the motion detection work to each camera
@@ -43,13 +43,8 @@ In the Device Setting (access via CMS, or via InternetExporer):
 #### 4) Daemon & Log file
 - Launch Daemon :`./pcag.php`
 - Kill Daemon : `killall -9 pcag.php`
-- view Logfile: `tail -f /var/log/pcag.php.log`
-
-
-## Known bugs
- While the daemon is working as expected to serve client requests as a multi threaded server, the parent/child mechanism is launched twice (PEAR system_daemon + php-multithreaded-socket-server), which obvioulsy is NOT clean and safe.
-
-**Anyone mastering the *PCNTL* Php Extension is *ABSOLUTELY WELCOME* to submit a Pull Request to fix this.**
+- View Logfile: `tail -f /var/log/pcag.php.log`
+- Create /etc/init.d script: `./pcag.php --write-initd`
 
 
 ## License
