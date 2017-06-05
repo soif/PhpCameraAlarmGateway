@@ -169,20 +169,6 @@ class PhpCameraAlarmGateway {
 
 
 		// ---------------------------------------------------------------------------------------
-/*
-		$sock = socket_create(AF_INET, SOCK_STREAM, 0); // 0 for  SQL_TCP
-		socket_bind($sock, $this->server_ip, $this->server_port) or die('Could not bind to address');  //0 for localhost
-		socket_listen($sock);
-		$is_ok=true;
-		while (!System_Daemon::isDying() && $is_ok) {
-			$client	= socket_accept($sock);
-			$input	= socket_read($client, 1024000);
-			$msg	=trim($input);
-			socket_write($client, $response);
-			socket_close($client);
-		}
-		socket_close($sock);
-*/
 
 		$server = new \Sock\SocketServer($this->server_port,$this->server_ip);
 		$server->showLog(false);
